@@ -42,7 +42,6 @@ public class MainActivity extends AppCompatActivity {
                 public void onClick(View view) {
                     int index = mMainBottomeSwitcherContainer.indexOfChild(child);
                     changUi(index);
-
                 }
             });
 
@@ -58,14 +57,16 @@ public class MainActivity extends AppCompatActivity {
             } else {
                 setEnabled(child, true);
             }
-
         }
-        getSupportFragmentManager().beginTransaction().replace(R.id.main_fragment_container, mFragments.get(index)).commit();
+        getSupportFragmentManager().beginTransaction().replace(R.id.main_fragment_container,
+                mFragments.get
+                (index))
+                .commit();
     }
 
     private void setEnabled(View child, boolean b) {
-             child.setEnabled(b);
-        if (child instanceof ViewGroup){
+        child.setEnabled(b);
+        if (child instanceof ViewGroup) {
             int count = ((ViewGroup) child).getChildCount();
             for (int i = 0; i < count; i++) {
                 View item = ((ViewGroup) child).getChildAt(i);

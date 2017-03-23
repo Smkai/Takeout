@@ -1,14 +1,21 @@
 package ck.itheima.com.takeout.ui.fragment;
 
-import android.graphics.Color;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
+
+import butterknife.ButterKnife;
+import butterknife.InjectView;
+import butterknife.OnClick;
+import ck.itheima.com.takeout.R;
+import ck.itheima.com.takeout.ui.activity.LoginActivity;
 
 /**
  * 类名:    HomeFragment
@@ -20,14 +27,40 @@ import android.widget.TextView;
  */
 
 public class UserFragment extends Fragment {
+    @InjectView(R.id.tv_user_setting)
+    ImageView mTvUserSetting;
+    @InjectView(R.id.iv_user_notice)
+    ImageView mIvUserNotice;
+    @InjectView(R.id.login)
+    ImageView mLogin;
+    @InjectView(R.id.username)
+    TextView mUsername;
+    @InjectView(R.id.phone)
+    TextView mPhone;
+    @InjectView(R.id.ll_userinfo)
+    LinearLayout mLlUserinfo;
+    @InjectView(R.id.iv_address_manager)
+    ImageView mIvAddressManager;
+
     @Nullable
     @Override
-    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        TextView tv = new TextView(getContext());
-                tv.setGravity(Gravity.CENTER);
-                tv.setTextColor(Color.BLUE);
-                tv.setText(this.getClass()
-                        .getSimpleName());
-                return tv;
+    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable
+            Bundle savedInstanceState) {
+
+        View userView = inflater.inflate(R.layout.fragment_user, null);
+        ButterKnife.inject(this, userView);
+        return userView;
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        ButterKnife.reset(this);
+    }
+
+    @OnClick(R.id.login)
+    public void onClick() {
+        Intent intent = new Intent(getContext(), LoginActivity.class);
+        startActivity(intent);
     }
 }

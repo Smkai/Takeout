@@ -1,5 +1,4 @@
 package ck.itheima.com.takeout.ui.fragment;
-
 import android.animation.ArgbEvaluator;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -12,13 +11,11 @@ import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 import ck.itheima.com.takeout.R;
-import ck.itheima.com.takeout.ui.HomeAdapter;
+import ck.itheima.com.takeout.presenter.HomeFragmentPresenter;
+import ck.itheima.com.takeout.ui.adapter.HomeAdapter;
 
 /**
  * 类名:    HomeFragment
@@ -40,24 +37,28 @@ public class HomeFragment extends Fragment {
     LinearLayout mLlTitleContainer;
     @InjectView(R.id.rv_home)
     RecyclerView mRvHome;
-    private HomeAdapter mHomeAdapter;
+    public HomeAdapter mHomeAdapter;
+    private HomeFragmentPresenter mHomeFragmentPresenter;
 
     @Nullable
     @Override
-    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle
+            savedInstanceState) {
         View homeView = inflater.inflate(R.layout.fragment_home, null);
         ButterKnife.inject(this, homeView);
 
+        mHomeFragmentPresenter = new HomeFragmentPresenter(this);//初始化
 
         mHomeAdapter = new HomeAdapter(getContext());
-        mRvHome.setLayoutManager(new LinearLayoutManager(getContext(),LinearLayoutManager.VERTICAL,false));
+        mRvHome.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false));
         mRvHome.setAdapter(mHomeAdapter);
 
-        mNearby.clear();
-        mOther.clear();
+//        mNearby.clear();
+//        mOther.clear();
 
         return homeView;
     }
+
     int sumY;
     float distance = 200f;
     ArgbEvaluator mArgbEvaluator = new ArgbEvaluator();
@@ -68,7 +69,7 @@ public class HomeFragment extends Fragment {
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         fillData();
-        mHomeAdapter.setList(mNearby, mOther);
+
 
         mRvHome.setOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
@@ -81,12 +82,12 @@ public class HomeFragment extends Fragment {
                 //                float percent = sumY /distance;
                 //#ffddaa
                 int bgColor;
-                if(sumY <= 0){
+                if (sumY <= 0) {
                     bgColor = startColor;
-                }else if(sumY > distance){
+                } else if (sumY > distance) {
                     bgColor = endColor;
-                }else{
-                    bgColor = (int) mArgbEvaluator.evaluate(sumY /distance, startColor, endColor);
+                } else {
+                    bgColor = (int) mArgbEvaluator.evaluate(sumY / distance, startColor, endColor);
                 }
                 mLlTitleContainer.setBackgroundColor(bgColor);
             }
@@ -94,15 +95,11 @@ public class HomeFragment extends Fragment {
         });
     }
 
-    private List<String> mNearby = new ArrayList<>();
-    private List<String> mOther = new ArrayList<>();
-    public void fillData(){
-        for (int i = 0; i < 8; i++) {
-            mNearby.add("这是第" + i);
-        }
-        for (int i = 0; i < 34; i++) {
-            mOther.add("周边" + i);
-        }
+//    private List<Seller> mNearby = new ArrayList<>();
+//    private List<Seller> mOther = new ArrayList<>();
+
+    public void fillData() {
+     mHomeFragmentPresenter.loadHomeInfo();
     }
 
     @Override
